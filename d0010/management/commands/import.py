@@ -10,4 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         p = FlowD0010Parser()
         for file_name in options['filenames']:
-            p.run(file_name)
+            try:
+                p.run(file_name)
+            except Exception as e:
+                raise Exception(f'Parse error at line {p._line_num}')

@@ -23,8 +23,13 @@ def parse_timestamp(s: str) -> datetime:
 
 class FlowD0010Parser:
     DELIMITER = '|'
-    
+
+
     def __init__(self) -> None:
+        self._init_new_file()
+
+
+    def _init_new_file(self) -> None:
         self._line_num = 0
         self._curr_file = None
         self._curr_mpan = None
@@ -78,6 +83,9 @@ class FlowD0010Parser:
 
     def _parse_reading(self, rest_vals: t.List) -> None:
         self._assert_consistency()
+        assert self._curr_mpan is not None
+        assert self._curr_file is not None
+        assert self._curr_meter_info is not None
         register_id, timestamp, reading, _, _, _, reading_method = rest_vals
         self._curr_readings.append(
             RegisterReading(
@@ -120,8 +128,8 @@ class FlowD0010Parser:
         self._line_num += 1
 
     def run(self, filename: str) -> None:
+        self._init_new_file()
         with open(filename, 'r') as f:
-
             with transaction.atomic():
 
                 self._curr_file = DataFile(filename=os.path.basename(filename))
@@ -131,4 +139,3 @@ class FlowD0010Parser:
                     self._parse_line(line.rstrip('\n'))
 
             assert self._is_footer_read, 'Footer is not read'
-            self._curr_file = None
