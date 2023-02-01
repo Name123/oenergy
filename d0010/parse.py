@@ -16,7 +16,7 @@ class MessageType(str, Enum):
     MeterData = '028'
     RegisterReading = '030'
 
-    
+
 def parse_timestamp(s: str) -> datetime:
     return datetime.strptime(s, '%Y%m%d%H%M%S')
 
@@ -35,7 +35,7 @@ class FlowD0010Parser:
         self._curr_mpan = None
         self._curr_meter_info = None
         self._curr_readings = []
-        
+
         self._is_header_read = False
         self._is_footer_read = False
 
@@ -134,7 +134,7 @@ class FlowD0010Parser:
 
                 self._curr_file = DataFile(filename=os.path.basename(filename))
                 self._curr_file.save()
-            
+
                 for line in f:
                     self._parse_line(line.rstrip('\n'))
 
