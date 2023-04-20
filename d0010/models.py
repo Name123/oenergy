@@ -26,4 +26,4 @@ class RegisterReading(models.Model):
     method = models.CharField(max_length=1)
 
     class Meta:
-        unique_together = ('mpan', 'meter', 'meter_register_id')
+        unique_together = ('datetime', 'mpan', 'meter', 'meter_register_id')
